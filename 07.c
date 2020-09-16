@@ -3,42 +3,29 @@
 #include <fcntl.h>
 
 int main(){
-    //-------------------------------Variable declaration--------------------------
-    char p1[] = "Enter the name of the file that you want to copy: ", p2[] = "Enter the name of the target file: ";
-    char temp[100], temp2[100], only1Char[1], only1Char2[1];
+    int fdMainFile = open("MainFileQues7.txt", O_RDONLY);
+    const int max = 100000;
+    if(fdMainFile == -1){
+        char message[] = "File Doesn't Exist with name as \"MainFileQues7.txt\" hence creating one\n";
+        write(2, message, sizeof(message)-1);
+        //perror("Error");
+        fdMainFile = open("MainFileQues7.txt", O_CREAT|O_WRONLY|O_TRUNC, 0644);
+        char content[] = "This content is created from code file.";
+        write(fdMainFile, content, sizeof(content) - 1);
+        close(fdMainFile);
+    }
+    fdMainFile = open("MainFileQues7.txt", O_RDONLY);
+
+    char content[max];
+    read(fdMainFile, content, sizeof(content));
+    int fdCopiedFile = open("CopiedFileQues7.txt", O_CREAT|O_WRONLY|O_TRUNC, 0644);
     int i = 0;
-
-    //-------------------------------Get Name of file1--------------------------
-    write(2, p1, sizeof(p1));
-    read(1, only1Char, sizeof(char));
-    while(only1Char[0] != '\n'){
-        temp[i++] = only1Char[0];
-        read(1, only1Char, sizeof(char));
+    while(content[i] != '\0'){
+        char copiedContent[1] = { content[i++] };
+        write(fdCopiedFile, copiedContent, sizeof(copiedContent));
     }
 
-    char file1[i];
-    for(int j = 0; j < i; j++){
-        file1[j] = temp[j];
-    }
-    puts(file1);
-    //-------------------------------Validate file1--------------------------
-    int fdOfMainFile = open(file1, O_RDONLY);
-    if(fdOfMainFile == -1){
-        perror("Error");
-        return -1;
-    }
-
-    //-------------------------------Get Name of file2--------------------------
-    write(2, p2, sizeof(p2));
-    int x = 0;
-    read(1, only1Char2, sizeof(char));
-    while(only1Char2[0] != '\n'){
-        temp2[x++] = only1Char2[0];
-        read(1, only1Char2, sizeof(char));
-    }
-    puts(temp2);
-    //char file2[x];
-
-
+    close(fdMainFile);
+    close(fdCopiedFile);
     return 0;
 }
