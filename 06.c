@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include <unistd.h>
-#include <string.h>
 
 int main(){
     char content[1500];

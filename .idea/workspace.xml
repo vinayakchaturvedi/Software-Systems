@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="da21309b-0eb4-4e9b-8d6e-bff92c3ba9d3" name="Default Changelist" comment="" />
+    <list default="true" id="da21309b-0eb4-4e9b-8d6e-bff92c3ba9d3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/07.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/a.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/06.c" beforeDir="false" afterPath="$PROJECT_DIR$/06.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/a.out" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1hS3iN9km4OHynJjXbLC0q8AhlG" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -28,16 +41,49 @@
       <option name="presentableId" value="Default" />
       <updated>1599990793353</updated>
     </task>
+    <task id="LOCAL-00001" summary="Adding 5 and 6">
+      <created>1600193896646</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1600193896646</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Adding 5 and 6" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding 5 and 6" />
   </component>
   <component name="WindowStateProjectService">
     <state x="166" y="27" width="1024" height="741" key="#Project_Structure" timestamp="1599990795481">
       <screen x="0" y="27" width="1366" height="741" />
     </state>
     <state x="166" y="27" width="1024" height="741" key="#Project_Structure/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1599990795481" />
-    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup" timestamp="1600026500682">
+    <state x="248" y="27" width="860" height="741" key="CommitChangelistDialog2" timestamp="1600193894802">
       <screen x="0" y="27" width="1366" height="741" />
     </state>
-    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600026500682" />
+    <state x="248" y="27" width="860" height="741" key="CommitChangelistDialog2/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600193894802" />
+    <state x="127" y="86" width="1092" height="629" key="DiffContextDialog" timestamp="1600193882647">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="127" y="86" width="1092" height="629" key="DiffContextDialog/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600193882647" />
+    <state x="533" y="297" width="584" height="207" key="Github.ShareDialog" timestamp="1600191318898">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="533" y="297" width="584" height="207" key="Github.ShareDialog/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600191318898" />
+    <state x="386" y="84" width="583" height="633" key="Github.UntrackedFilesDialog" timestamp="1600191333931">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="386" y="84" width="583" height="633" key="Github.UntrackedFilesDialog/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600191333931" />
+    <state x="278" y="133" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1600193899205">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="278" y="133" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600193899205" />
+    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup" timestamp="1600194647747">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600194647747" />
   </component>
 </project>
