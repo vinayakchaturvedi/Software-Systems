@@ -1,0 +1,10 @@
+I-node number:              3935675
+Number of Hard links:       1
+UID:                        1000
+GID:                        1000
+File size:                  0 bytes
+Block size:                 4096 bytes
+Number of blocks:           0
+Time of last access:        Wed Sep 16 23:13:41 2020
+Time of last modification:  Wed Sep 16 23:14:00 2020
+Time of last change:        Wed Sep 16 23:14:00 2020

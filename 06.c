@@ -4,12 +4,8 @@
 int main(){
     char content[1500];
 
-    read(1, content, sizeof(content));
-    for(int i = 0; content[i] != '\0'; i++)
-    {
-        char temp[] = { content[i] };
-        write(2, temp, sizeof(char));
-    }
+    int numOfBytes = read(1, content, sizeof(content));
+    write(2, content, numOfBytes);
 
     return 0;
 }
