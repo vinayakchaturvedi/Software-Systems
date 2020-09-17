@@ -10,10 +10,20 @@
 
 int main(){
 
-    struct stat status;
-    char fileName[] = "MainFileQues9.txt";
-    creat(fileName, 0644);
+    char p1[] = "Enter the name of the file: ";
+    char temp[100];
 
+    //-------------------------------Get Name of file1--------------------------
+    write(2, p1, sizeof(p1));
+    int bytesRead = read(1, temp, sizeof(temp));
+    char fileName[bytesRead];
+    for(int j = 0; j < bytesRead - 1; j++){
+        fileName[j] = temp[j];
+    }
+    fileName[bytesRead-1] = '\0';
+
+    //-------------------------------Retrieve the status--------------------------
+    struct stat status;
     int output = stat(fileName, &status);
 
     if (output == -1) {
