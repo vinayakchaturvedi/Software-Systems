@@ -1,0 +1,3 @@
+Dummy Content...Â
+Original FileDescriptor:  3
+Duplicate FileDescriptor: 10
