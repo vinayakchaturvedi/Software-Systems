@@ -7,15 +7,15 @@
 int main(){
 
     //------------------------------------------------------Variable Declaration------------------------------------------------------
-    int fd = open("18_db", O_RDWR);
+    int fd = open("18_db", O_RDONLY);
     struct Record record;
     int recordNum;
-    printf("Enter the record number (1, 2, 3) that you want to write lock: ");
+    printf("Enter the record number (1, 2, 3) that you want to read lock: ");
     scanf("%d", &recordNum);
     getchar();
 
     struct flock lock;
-    lock.l_type = F_WRLCK;
+    lock.l_type = F_RDLCK;
     lock.l_whence = SEEK_SET;
     lock.l_start = ((recordNum) * sizeof(record));
     lock.l_len = sizeof(record);
@@ -30,14 +30,7 @@ int main(){
 
     lseek(fd, ((recordNum-1) * sizeof(record)), SEEK_SET);
     read(fd, &record, sizeof(record));
-    printf("For Record Number: %d, old Record Access count is: %d\n", record.recordNumber, record.accessCount);
-
-    record.accessCount = record.accessCount + 1;
-    fd = open("18_db", O_RDWR);
-
-    printf("Record accessCount has been updated and new accessCount is: %d\n", record.accessCount);
-    lseek(fd, ((recordNum-1) * sizeof(record)), SEEK_SET);
-    write(fd, &record, sizeof(record));
+    printf("Record Number: %d and Record Access count: %d\n", record.recordNumber, record.accessCount);
 
     printf("Press enter to unlock...\n");
     getchar();
