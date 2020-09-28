@@ -12,17 +12,20 @@ int main(){
 
     //----------------------Check ReadOnly------------------------------------------
     fileDescriptor = open("MainFileQues12.txt", O_RDONLY);
-    printf("Check ReadOnly:  %d\n", fcntl(fileDescriptor, F_GETFL));
+    int mode = fcntl(fileDescriptor, F_GETFL) & O_ACCMODE;
+    printf("Current Mode is: %s\n", mode == O_RDONLY ? "ReadOnly" : "Wrong");
     close(fileDescriptor);
 
     //----------------------Check WriteOnly------------------------------------------
     fileDescriptor = open("MainFileQues12.txt", O_WRONLY);
-    printf("Check WriteOnly: %d\n", fcntl(fileDescriptor, F_GETFL));
+    mode = fcntl(fileDescriptor, F_GETFL) & O_ACCMODE;
+    printf("Current Mode is: %s\n", mode == O_WRONLY ? "WriteOnly" : "Wrong");
     close(fileDescriptor);
 
     //----------------------Check ReadWrite------------------------------------------
     fileDescriptor = open("MainFileQues12.txt", O_RDWR);
-    printf("Check ReadWrite: %d\n", fcntl(fileDescriptor, F_GETFL));
+    mode = fcntl(fileDescriptor, F_GETFL) & O_ACCMODE;
+    printf("Current Mode is: %s\n", mode == O_RDWR ? "ReadWrite" : "Wrong");
     close(fileDescriptor);
 
     return 0;
