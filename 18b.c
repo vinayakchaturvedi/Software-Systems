@@ -17,7 +17,7 @@ int main(){
     struct flock lock;
     lock.l_type = F_RDLCK;
     lock.l_whence = SEEK_SET;
-    lock.l_start = ((recordNum) * sizeof(record));
+    lock.l_start = ((recordNum-1) * sizeof(record));
     lock.l_len = sizeof(record);
     lock.l_pid = getpid();
 

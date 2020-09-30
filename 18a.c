@@ -17,7 +17,7 @@ int main(){
     struct flock lock;
     lock.l_type = F_WRLCK;
     lock.l_whence = SEEK_SET;
-    lock.l_start = ((recordNum) * sizeof(record));
+    lock.l_start = ((recordNum-1) * sizeof(record));
     lock.l_len = sizeof(record);
     lock.l_pid = getpid();
 
@@ -33,7 +33,6 @@ int main(){
     printf("For Record Number: %d, old Record Access count is: %d\n", record.recordNumber, record.accessCount);
 
     record.accessCount = record.accessCount + 1;
-    fd = open("18_db", O_RDWR);
 
     printf("Record accessCount has been updated and new accessCount is: %d\n", record.accessCount);
     lseek(fd, ((recordNum-1) * sizeof(record)), SEEK_SET);
