@@ -26,7 +26,7 @@ int main(){
     printf("Old Ticket number: %d\n", ticket.ticketNumber);
 
     ticket.ticketNumber = ticket.ticketNumber + 1;
-    fd = open("17_db", O_RDWR|O_TRUNC);
+    lseek(fd, 0, SEEK_SET);
 
     printf("Ticket number has been updated and new number is: %d\n", ticket.ticketNumber);
     write(fd, &ticket, sizeof(ticket));
