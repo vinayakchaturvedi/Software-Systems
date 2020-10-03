@@ -15,7 +15,7 @@ int main(){
         wait(NULL);
         lseek(fd, 0, SEEK_SET);
         read(fd, content, sizeof(content));
-        write(2, content, sizeof(content));
+        write(2, content, sizeof(content));             //Displaying content on the STDOUT
         close(fd);
     }
     else{           //child
@@ -24,6 +24,15 @@ int main(){
         exit(0);
     }
 
-
     return 0;
 }
+/*
+vinayak@vinayak-Lenovo-G50-70:~/Desktop/Study_Material/1stSem/SS/IJHandsOn$ cc 22.c
+vinayak@vinayak-Lenovo-G50-70:~/Desktop/Study_Material/1stSem/SS/IJHandsOn$ ./a.out
+Writing from parent process...
+Writing from child process...
+vinayak@vinayak-Lenovo-G50-70:~/Desktop/Study_Material/1stSem/SS/IJHandsOn$ cat MainFileQues22.txt
+Writing from parent process...
+Writing from child process...
+vinayak@vinayak-Lenovo-G50-70:~/Desktop/Study_Material/1stSem/SS/IJHandsOn$
+*/
