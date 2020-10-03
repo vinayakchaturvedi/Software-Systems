@@ -5,7 +5,7 @@
 int main() {
 
     char myFifo[] = "./myFifo";
-    int res = mkfifo(myFifo, 0644);
+    int res = mknod(myFifo, S_IFIFO|0644, 0);
     if(res == -1){
         perror("MyFifo with name as \"myFifo\" already exists");
     }
