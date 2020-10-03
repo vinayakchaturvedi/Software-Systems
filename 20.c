@@ -11,7 +11,7 @@ int main(){
     nice(10);
 
     currNiceValue = nice(0);
-    printf("Nice value after modification is: %d\n", currNiceValue);
+    printf("Priority after modification is: %d\n", currNiceValue);
 
     return 0;
 }
