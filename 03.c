@@ -5,7 +5,7 @@ int main() {
 
     char fileName[] = "FileFrom3rd.txt";
     int fd = creat(fileName, 0644);
-    printf("%d\n", fd);
+    printf("File Descriptor Value: %d\n", fd);
 
     return 0;
 }
