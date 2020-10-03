@@ -22,8 +22,11 @@ int main(){
 
    if (retval == -1)
        perror("select()");
-   else if (retval)
+   else if (retval) {
        printf("Data is available now.\n");
+       char buff[1024];
+       read(1, buff, sizeof(buff));
+   }
    else
        printf("No data within 10 seconds.\n");
 
