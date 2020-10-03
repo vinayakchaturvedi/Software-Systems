@@ -16,7 +16,7 @@ int main() {
     //Use O_EXCEL FLAG
     int fdWithExcl = open("File1WithEXCL4thQ.txt", O_CREAT|O_RDWR|O_EXCL, 0644);
     if(fdWithExcl == -1){
-        perror("Error");
+        perror("");
     }
     else{
         printf("File doesn't exists\n");
