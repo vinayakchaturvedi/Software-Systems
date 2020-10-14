@@ -15,7 +15,7 @@ int main(){
     pthread_t threads;
     for(int i = 0; i < 3; i++){
         if(pthread_create(&threads, NULL, connectionHandler, NULL) < 0){
-            perror("Could not create thread");
+            perror("Not able to create thread");
             return 1;
         }
         printf("Running thread %d\n", i);
