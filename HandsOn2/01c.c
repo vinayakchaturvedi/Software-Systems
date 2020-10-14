@@ -24,7 +24,7 @@ int main(){
 
     printf("Starting Timer...\n");
     ret = setitimer(ITIMER_PROF, &value, NULL);  //Decrements for both when the process executes and when the system is
-     //executing on behalf of process and trigger SIGPROF after expiation.
+     //executing on behalf of process and trigger SIGPROF after expiration.
     sleep(5);
     while(1);
     return 0;

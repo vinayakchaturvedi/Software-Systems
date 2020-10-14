@@ -23,7 +23,7 @@ int main(){
     int ret;
 
     printf("Starting Timer...\n");
-    ret = setitimer(ITIMER_VIRTUAL, &value, NULL);  //Decrement only when process is executing and trigger SIGVTALRM after expiation.
+    ret = setitimer(ITIMER_VIRTUAL, &value, NULL);  //Decrement only when process is executing and trigger SIGVTALRM after expiration.
     sleep(5);
     while(1);
     return 0;

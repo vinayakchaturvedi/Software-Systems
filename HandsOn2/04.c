@@ -15,14 +15,12 @@ unsigned long long rdtsc(void){
 int main(){
     long long int start, end;
     start = rdtsc();
-    printf("Initial value = %llu\n", start);
     for(int i = 0; i < 100; i++){
         getppid();
     }
     end = rdtsc();
-    printf("End Value = %llu\n", end);
-    end = end - start;
-    printf("Cycle taken = %llu\n", end);
+    printf("Total Cycles taken = %llu\n", end - start);
+    printf("Time taken: %f nano seconds\n", (end - start) / 1.2);       //Divide by CPU freq --> cpu MHz : 1280.834
 
     return 0;
 }
