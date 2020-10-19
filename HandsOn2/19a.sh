@@ -1,0 +1,1 @@
+mknod myfifo1 p

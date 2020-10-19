@@ -2,38 +2,57 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="da21309b-0eb4-4e9b-8d6e-bff92c3ba9d3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/HandsOn2/01a.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/01b.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/01c.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/02.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/03.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/04.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/05.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/06.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/07.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/08a.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/08b.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/08c.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/08d.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/08e.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/08f.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/08g.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/09.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/10a.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/10b.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/10c.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/11.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/12.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/13a.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/13b.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/14.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/15.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/16.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/17a.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/17b.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/17c.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HandsOn2/a.out" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/18.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/19a.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/19b.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/19c.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/19d.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/19e.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/20a.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/20b.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/21a.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/21b.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/22a.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/22b.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/23.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/24.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/25.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/26.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/27a.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/27b.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/28.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/29.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/30a.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/30b.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/30c.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/30d.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/31a.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/31b.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/32a.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/32aCreate.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/32b.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/32bCreate.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/32c.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/32cCreate.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/32d.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HandsOn2/record" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handsonlist2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HandsOn1/30.c" beforeDir="false" afterPath="$PROJECT_DIR$/HandsOn1/30.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HandsOn1/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/HandsOn1/a.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HandsOn2/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/18.c" beforeDir="false" afterPath="$PROJECT_DIR$/handsonlist2/18.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/19_d.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/19_e.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/19abc.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/24_a.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/24_b.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/25.c" beforeDir="false" afterPath="$PROJECT_DIR$/handsonlist2/25.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/26.c" beforeDir="false" afterPath="$PROJECT_DIR$/handsonlist2/26.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/27_a.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/27_b.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/28.c" beforeDir="false" afterPath="$PROJECT_DIR$/handsonlist2/28.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handsonlist2/29.c" beforeDir="false" afterPath="$PROJECT_DIR$/handsonlist2/29.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +60,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/handsonlist2" />
   </component>
   <component name="ProjectId" id="1hS3iN9km4OHynJjXbLC0q8AhlG" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -90,7 +109,49 @@
       <option name="project" value="LOCAL" />
       <updated>1602053550758</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Adding HandsOn2 question 1 to 17">
+      <created>1602088640220</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1602088640220</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Adding HandsOn2 question 33">
+      <created>1602677794599</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1602677794600</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Adding HandsOn2 question 34">
+      <created>1602680117510</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1602680117510</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Adding HandsOn2 question 34b">
+      <created>1602680228608</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1602680228608</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Code Refactor">
+      <created>1602683428011</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1602683428011</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Code Refactor">
+      <created>1602683487781</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1602683487781</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -101,7 +162,12 @@
     <MESSAGE value="Adding 5 and 6" />
     <MESSAGE value="Adding 7" />
     <MESSAGE value="Moving to separate package" />
-    <option name="LAST_COMMIT_MESSAGE" value="Moving to separate package" />
+    <MESSAGE value="Adding HandsOn2 question 1 to 17" />
+    <MESSAGE value="Adding HandsOn2 question 33" />
+    <MESSAGE value="Adding HandsOn2 question 34" />
+    <MESSAGE value="Adding HandsOn2 question 34b" />
+    <MESSAGE value="Code Refactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code Refactor" />
   </component>
   <component name="WindowStateProjectService">
     <state x="166" y="27" width="1024" height="741" key="#Project_Structure" timestamp="1599990795481">
@@ -112,19 +178,20 @@
       <screen x="1366" y="0" width="1600" height="900" />
     </state>
     <state x="1366" y="104" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602079518339" />
-    <state x="2228" y="248" width="566" height="403" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1602085702807">
+    <state x="2228" y="248" width="566" height="403" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1602685608113">
       <screen x="1366" y="0" width="1600" height="900" />
     </state>
-    <state x="2228" y="248" width="566" height="403" key="#com.intellij.fileTypes.FileTypeChooser/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602085702807" />
-    <state x="1656" y="0" width="860" height="741" key="CommitChangelistDialog2" timestamp="1602053549141">
+    <state x="2228" y="248" width="566" height="403" key="#com.intellij.fileTypes.FileTypeChooser/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602685608113" />
+    <state x="1656" y="0" width="868" height="871" key="CommitChangelistDialog2" timestamp="1602683487615">
       <screen x="1366" y="0" width="1600" height="900" />
     </state>
-    <state x="248" y="27" width="860" height="741" key="CommitChangelistDialog2/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600193894802" />
-    <state x="1656" y="0" key="CommitChangelistDialog2/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602053549141" />
-    <state x="127" y="86" width="1092" height="629" key="DiffContextDialog" timestamp="1600193882647">
-      <screen x="0" y="27" width="1366" height="741" />
+    <state x="248" y="27" width="860" height="741" key="CommitChangelistDialog2/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1602680228445" />
+    <state x="1656" y="0" width="868" height="871" key="CommitChangelistDialog2/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602683487615" />
+    <state x="1572" y="77" width="1092" height="629" key="DiffContextDialog" timestamp="1602683416870">
+      <screen x="1366" y="0" width="1600" height="900" />
     </state>
     <state x="127" y="86" width="1092" height="629" key="DiffContextDialog/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600193882647" />
+    <state x="1572" y="77" width="1092" height="629" key="DiffContextDialog/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602683416870" />
     <state x="533" y="297" width="584" height="207" key="Github.ShareDialog" timestamp="1600191318898">
       <screen x="0" y="27" width="1366" height="741" />
     </state>
@@ -133,25 +200,25 @@
       <screen x="0" y="27" width="1366" height="741" />
     </state>
     <state x="386" y="84" width="583" height="633" key="Github.UntrackedFilesDialog/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600191333931" />
-    <state x="1567" y="4" width="1022" height="737" key="SettingsEditor" timestamp="1602061571261">
+    <state x="1567" y="4" width="1022" height="737" key="SettingsEditor" timestamp="1602685397004">
       <screen x="1366" y="0" width="1600" height="900" />
     </state>
-    <state x="172" y="31" width="1022" height="737" key="SettingsEditor/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1602053742586" />
-    <state x="1567" y="4" key="SettingsEditor/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602061571261" />
-    <state x="1692" y="129" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1602053553021">
+    <state x="172" y="31" width="1022" height="737" key="SettingsEditor/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1602673077574" />
+    <state x="1567" y="4" width="1022" height="737" key="SettingsEditor/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602685397004" />
+    <state x="1692" y="129" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1602683489195">
       <screen x="1366" y="0" width="1600" height="900" />
     </state>
-    <state x="278" y="133" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1600193899205" />
-    <state x="1692" y="129" key="Vcs.Push.Dialog.v2/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602053553021" />
-    <state x="1804" y="132" width="724" height="635" key="find.popup" timestamp="1602087617148">
+    <state x="278" y="133" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1602680229822" />
+    <state x="1692" y="129" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602683489195" />
+    <state x="1804" y="132" width="724" height="635" key="find.popup" timestamp="1602847127637">
       <screen x="1366" y="0" width="1600" height="900" />
     </state>
-    <state x="374" y="136" width="618" height="522" key="find.popup/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1602054292311" />
-    <state x="1804" y="132" width="724" height="635" key="find.popup/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602087617148" />
-    <state x="1771" y="75" width="788" height="824" key="search.everywhere.popup" timestamp="1602087626055">
+    <state x="374" y="136" width="618" height="522" key="find.popup/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1602841670977" />
+    <state x="1804" y="132" width="724" height="635" key="find.popup/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602847127637" />
+    <state x="1771" y="75" width="788" height="824" key="search.everywhere.popup" timestamp="1602694373948">
       <screen x="1366" y="0" width="1600" height="900" />
     </state>
-    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1602054275897" />
-    <state x="1771" y="75" width="788" height="824" key="search.everywhere.popup/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602087626055" />
+    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup/0.27.1366.741/1366.0.1600.900@0.27.1366.741" timestamp="1602690632200" />
+    <state x="1771" y="75" width="788" height="824" key="search.everywhere.popup/0.27.1366.741/1366.0.1600.900@1366.0.1600.900" timestamp="1602694373948" />
   </component>
 </project>

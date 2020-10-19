@@ -1,0 +1,1 @@
+mkfifo myfifo2
