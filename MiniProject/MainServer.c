@@ -7,6 +7,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include<stdbool.h>
+#include<time.h>
 #include"AccountStruct.c"
 #include"LoginStruct.c"
 
@@ -18,6 +19,37 @@ void printString(char *string){
     printf(" Testing: %s | ", string);
 }
 
+char timeofTransaction[40];
+
+void generateTimeString(){
+    char temp[40];
+
+    memcpy(timeofTransaction, temp, sizeof(temp));
+    time_t rawtime;
+    struct tm* timeinfo;
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    char day[3], mon[3], year[5], hour[3], min[3];
+    sprintf(day, "%d", timeinfo->tm_mday);
+    sprintf(mon, "%d", timeinfo->tm_mon + 1);
+    sprintf(year, "%d", timeinfo->tm_year + 1900);
+    sprintf(hour, "%d", timeinfo->tm_hour);
+    sprintf(min, "%d", timeinfo->tm_min);
+
+    memcpy(timeofTransaction, day, sizeof(day));
+    strcat(timeofTransaction, " : ");
+    strcat(timeofTransaction, mon);
+    strcat(timeofTransaction, " : ");
+    strcat(timeofTransaction, year);
+    strcat(timeofTransaction, " || ");
+    strcat(timeofTransaction, hour);
+    strcat(timeofTransaction, " : ");
+    strcat(timeofTransaction, min);
+
+    return;
+}
+//----------------------Admin Operations---------------------
 
 int add(int clientSockDesc){
     struct Account account;
@@ -51,6 +83,18 @@ int add(int clientSockDesc){
 
     close(accountNumberFd);
 
+
+    char accountNumberString[40];
+    sprintf(accountNumberString, "%ld" , account.accountNumber);
+    char userName[40];
+    strcpy(userName, account.Name);
+    strcat(userName, accountNumberString);
+    memcpy(login.userName, userName, sizeof(userName));
+    memcpy(account.userName, userName, sizeof(userName));
+
+    generateTimeString();
+    memcpy(account.transactions[0].timeofTransaction, timeofTransaction, sizeof(timeofTransaction));
+
     //Lock user_login_DB
     lock.l_whence = SEEK_END;
     lock.l_len = sizeof(login);
@@ -72,6 +116,8 @@ int add(int clientSockDesc){
     write(accountFd, &account, sizeof(account));
     lock.l_type = F_UNLCK;
     fcntl(accountFd, F_SETLK, &lock);
+
+    write(clientSockDesc, &account, sizeof(account));
 
     close(accountFd);
 }
@@ -121,7 +167,6 @@ int deleteAccount(int clientSockDesc){
     read(fd, &account, sizeof(account));
 
 
-
     account.active = false;
     lseek(fd, ((count) * sizeof(account)), SEEK_SET);
     write(fd, &account, sizeof(account));
@@ -135,7 +180,7 @@ int deleteAccount(int clientSockDesc){
 
     int currBytes = read(fd, &oldLogin, sizeof(oldLogin));
     count = 0;
-    while(currBytes != 0 && strncmp(account.Name, oldLogin.userName, strlen(account.Name)) != 0){
+    while(currBytes != 0 && strncmp(account.userName, oldLogin.userName, strlen(account.userName)) != 0){
         currBytes = read(fd, &oldLogin, sizeof(oldLogin));
         count++;
     }
@@ -199,7 +244,7 @@ int modify(int clientSockDesc){
 
     write(clientSockDesc, &account, sizeof(account));   //Send Old Values
     char oldName[40];
-    strcpy(oldName, account.Name);
+    strcpy(oldName, account.userName);
 
     read(clientSockDesc, &account, sizeof(account));    //Get new values
 
@@ -222,6 +267,15 @@ int modify(int clientSockDesc){
     fd = open("./db/user_login_DB", O_RDWR);
     struct Login oldLogin;
 
+    //Lock Login DB
+    lock.l_type = F_WRLCK;
+    lock.l_whence = SEEK_SET;
+    lock.l_start = ((count) * sizeof(oldLogin));
+    lock.l_len = sizeof(oldLogin);
+    lock.l_pid = getpid();
+
+    fcntl(fd, F_SETLKW, &lock);
+
     int currBytes = read(fd, &oldLogin, sizeof(oldLogin));
     count = 0;
     while(currBytes != 0 && strncmp(oldName, oldLogin.userName, strlen(oldName)) != 0){
@@ -230,11 +284,15 @@ int modify(int clientSockDesc){
     }
 
     lseek(fd, ((count) * sizeof(oldLogin)), SEEK_SET);
-    memcpy(oldLogin.type, &account.type, 2);
-    memcpy(oldLogin.userName, &account.Name, sizeof(account.Name));
+    memcpy(oldLogin.type, account.type, 2);
+    memcpy(oldLogin.userName, account.userName, sizeof(account.userName));
 
     lseek(fd, ((count) * sizeof(oldLogin)), SEEK_SET);
     write(fd, &oldLogin, sizeof(oldLogin));
+
+    lock.l_type = F_UNLCK;
+    fcntl(fd, F_SETLK, &lock);
+
     close(fd);
 
     write(clientSockDesc, &account, sizeof(account));   //Send Old Values
@@ -281,9 +339,8 @@ int search(int clientSockDesc){
     return 0;
 }
 
-
 int handleAdminRequest(int clientSockDesc){
-    char welcome[] = "\n-----------------------------Welcome Admin-------------------------\n\nEnter the number corresponding to the operation that you want to perform:\n1: Add | 2: Delete | 3: Modify | 4: Search";
+    char welcome[] = "\n-----------------------------Welcome Admin-------------------------\n\nEnter the number corresponding to the operation that you want to perform:\n1: Add | 2: Delete | 3: Modify | 4: Search | 5: Exit";
     write(clientSockDesc, welcome, sizeof(welcome));
 
     int operation;
@@ -298,9 +355,258 @@ int handleAdminRequest(int clientSockDesc){
     return 0;
 }
 
-int handleUserRequest(int clientSockDesc){
+//----------------------Admin Operations Done---------------------
+
+//----------------------User Operations----------------------
+int deposit(int clientSockDesc, char* userName){
+
+    struct Account account;
+    int fd = open("./db/account_DB", O_RDONLY);
+    int count = 0;
+    int errorMessage = -1;
+
+    int bytes = read(fd, &account, sizeof(account));
+    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0){
+        bytes = read(fd, &account, sizeof(account));
+        count++;
+    }
+    close(fd);              //close read only
+
+    if(bytes == 0){
+        write(clientSockDesc, &errorMessage, sizeof(errorMessage));
+        return -1;
+    }
+    int success = 1;
+    write(clientSockDesc, &success, sizeof(success));         //Positive number for success;
+
+    long long int depositAmount;
+    read(clientSockDesc, &depositAmount, sizeof(depositAmount));
+
+    account.availableAmount += depositAmount;
+    account.transactionsCount++;
+
+    generateTimeString();
+    struct Transaction transaction;
+    transaction.amount = depositAmount;
+    memcpy(transaction.transactionType, "Deposit", 7);
+    memcpy(transaction.timeofTransaction, timeofTransaction, sizeof(timeofTransaction));
+
+    account.transactions[account.transactionsCount - 1] = transaction;
+
+    //Update in the file DB
+    fd = open("./db/account_DB", O_RDWR);
+    struct flock lock;
+    lock.l_type = F_WRLCK;
+    lock.l_whence = SEEK_SET;
+    lock.l_start = ((count) * sizeof(account));
+    lock.l_len = sizeof(account);
+    lock.l_pid = getpid();
+
+    fcntl(fd, F_SETLKW, &lock);
+    lseek(fd, ((count) * sizeof(account)), SEEK_SET);
+
+    write(fd, &account, sizeof(account));
+    lock.l_type = F_UNLCK;
+    fcntl(fd, F_SETLK, &lock);
+    close(fd);
+
+    char temp[1000] = "Done....\nAvailable Balance: \n";
+    
+    char remainingAmount[40];
+    sprintf(remainingAmount, "%lld", account.availableAmount);
+    strcat(temp, remainingAmount);
+    write(clientSockDesc, temp, sizeof(temp));
+
+    return 0;
+}
+
+int withdraw(int clientSockDesc, char* userName){
+
+    struct Account account;
+    int fd = open("./db/account_DB", O_RDONLY);
+    int count = 0;
+    int errorMessage = -1;
+
+    int bytes = read(fd, &account, sizeof(account));
+    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0){
+        bytes = read(fd, &account, sizeof(account));
+        count++;
+    }
+    close(fd);              //close read only
+
+    if(bytes == 0){
+        write(clientSockDesc, &errorMessage, sizeof(errorMessage));
+        return -1;
+    }
+    int success = 1;
+    write(clientSockDesc, &success, sizeof(success));         //Positive number for success;
+
+    long long int withdrawAmount;
+    read(clientSockDesc, &withdrawAmount, sizeof(withdrawAmount));
+    if(withdrawAmount > account.availableAmount) {
+        write(clientSockDesc, &errorMessage, sizeof(errorMessage));
+        return -1;
+    }
+    account.availableAmount -= withdrawAmount;
+    account.transactionsCount++;
+
+    generateTimeString();
+    struct Transaction transaction;
+    transaction.amount = withdrawAmount;
+    memcpy(transaction.transactionType, "Withdraw", 7);
+    memcpy(transaction.timeofTransaction, timeofTransaction, sizeof(timeofTransaction));
+
+    account.transactions[account.transactionsCount - 1] = transaction;
+
+    write(clientSockDesc, &success, sizeof(success));
+    //Update in the file DB
+    fd = open("./db/account_DB", O_RDWR);
+    struct flock lock;
+    lock.l_type = F_WRLCK;
+    lock.l_whence = SEEK_SET;
+    lock.l_start = ((count) * sizeof(account));
+    lock.l_len = sizeof(account);
+    lock.l_pid = getpid();
+
+    fcntl(fd, F_SETLKW, &lock);
+    lseek(fd, ((count) * sizeof(account)), SEEK_SET);
+
+    write(fd, &account, sizeof(account));
+    lock.l_type = F_UNLCK;
+    fcntl(fd, F_SETLK, &lock);
+    close(fd);
+
+    char temp[1000] = "Done....\nAvailable Balance: \n";
+    
+    char remainingAmount[40];
+    sprintf(remainingAmount, "%lld", account.availableAmount);
+    strcat(temp, remainingAmount);
+    write(clientSockDesc, temp, sizeof(temp));
+
+    return 0;
+}
+
+int balanceEnquiry(int clientSockDesc, char* userName){
+
+    struct Account account;
+    int fd = open("./db/account_DB", O_RDONLY);
+    int count = 0;
+    int errorMessage = -1;
+
+    int bytes = read(fd, &account, sizeof(account));
+    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0){
+        bytes = read(fd, &account, sizeof(account));
+        count++;
+    }
+    close(fd);              //close read only
+
+    if(bytes == 0){
+        write(clientSockDesc, &errorMessage, sizeof(errorMessage));
+        return -1;
+    }
+    int success = 1;
+    write(clientSockDesc, &success, sizeof(success));         //Positive number for success;
+
+    char temp[1000] = "Done....\nAvailable Balance: \n";
+    
+    char balanceEnquiry[40];
+    sprintf(balanceEnquiry, "%lld", account.availableAmount);
+    strcat(temp, balanceEnquiry);
+    write(clientSockDesc, temp, sizeof(temp));
+
+    return 0;
+}
+
+int passwordChange(int clientSockDesc, char* userName){
+
+    long count = 0;                 //To keep track of account in file
+    int fd = open("./db/user_login_DB", O_RDWR);
+    struct Login oldLogin;
+    char buff[40];
+    int errorMessage = -1, success = 1;
+
+    int currBytes = read(fd, &oldLogin, sizeof(oldLogin));
+    count = 0;
+    while(currBytes != 0 && strncmp(userName, oldLogin.userName, strlen(userName)) != 0){
+        currBytes = read(fd, &oldLogin, sizeof(oldLogin));
+        count++;
+    }
+    if(currBytes == 0){
+        write(clientSockDesc, &errorMessage, sizeof(errorMessage));
+        return -1;
+    }
+
+    struct flock lock;
+    lock.l_type = F_WRLCK;
+    lock.l_whence = SEEK_SET;
+    lock.l_start = ((count) * sizeof(oldLogin));
+    lock.l_len = sizeof(oldLogin);
+    lock.l_pid = getpid();
+
+    fcntl(fd, F_SETLKW, &lock);
+
+    lseek(fd, ((count) * sizeof(oldLogin)), SEEK_SET);
+    read(clientSockDesc, buff, sizeof(buff));
+
+    memcpy(oldLogin.password, buff, sizeof(buff));
+
+    lseek(fd, ((count) * sizeof(oldLogin)), SEEK_SET);
+    write(fd, &oldLogin, sizeof(oldLogin));
+
+    lock.l_type = F_UNLCK;
+    fcntl(fd, F_SETLK, &lock);
+
+    close(fd);
+
+    write(clientSockDesc, &success, sizeof(success));
+    return 0;
+}
+
+int viewDetails(int clientSockDesc, char* userName){
+
+    struct Account account;
+    int fd = open("./db/account_DB", O_RDONLY);
+    int count = 0;
+    int errorMessage = -1;
+
+    int bytes = read(fd, &account, sizeof(account));
+    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0){
+        bytes = read(fd, &account, sizeof(account));
+        count++;
+    }
+    close(fd);              //close read only
+
+    if(bytes == 0){
+        write(clientSockDesc, &errorMessage, sizeof(errorMessage));
+        return -1;
+    }
+    int success = 1;
+    write(clientSockDesc, &success, sizeof(success));         //Positive number for success;
+
+    write(clientSockDesc, &account, sizeof(account));   //Send Old Values
+
+    return 0;
+}
+
+int handleUserRequest(int clientSockDesc, char* userName){
+    char welcome[] = "\n-----------------------------Welcome User-------------------------\n\nEnter the number corresponding to the operation that you want to perform:\n1: Deposit | 2: Withdraw | 3: Balance Enquiry | 4: Password Change | 5: View Details | 6: Exit\n";
+    write(clientSockDesc, welcome, sizeof(welcome));
+
+    int operation;
+
+    read(clientSockDesc, &operation, sizeof(operation));
+    switch (operation) {
+        case 1: deposit(clientSockDesc, userName); break;
+        case 2: withdraw(clientSockDesc, userName); break;
+        case 3: balanceEnquiry(clientSockDesc, userName); break;
+        case 4: passwordChange(clientSockDesc, userName); break;
+        case 5: viewDetails(clientSockDesc, userName); break;
+    }
+    return 0;
+
 
 }
+//----------------------User Operations Done----------------------
 
 int validateCredentials(int clientSockDesc, int userType){
 
@@ -333,8 +639,9 @@ int validateCredentials(int clientSockDesc, int userType){
     fcntl(fd, F_SETLKW, &lock);
     int currBytes = read(fd, &record, sizeof(record));
     while(currBytes != 0){
-
-        if(strncmp(record.userName, userName, strlen(record.userName)) == 0 && strncmp(record.password, password, strlen(record.password)) == 0){
+        //TODO: put JA, NU as constraint
+        if(record.active && strncmp(record.userName, userName, strlen(record.userName)) == 0 &&
+        strncmp(record.password, password, strlen(record.password)) == 0){
             write(clientSockDesc, "Logged-in successfully", sizeof("Logged-in successfully"));
 
             lock.l_type = F_UNLCK;
@@ -342,7 +649,7 @@ int validateCredentials(int clientSockDesc, int userType){
 
             //go to services
             if(userType == ADMIN) handleAdminRequest(clientSockDesc);
-            //else handleUserRequest();
+            else handleUserRequest(clientSockDesc, record.userName);
 
             close(fd);
             return 0;

@@ -7,6 +7,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include<stdbool.h>
+#include<time.h>
 #include"AccountStruct.c"
 #include"LoginStruct.c"
 
@@ -14,6 +15,7 @@
 #define NORMAL_USER 2
 #define JOINT_ACCOUNT 3
 
+//----------------------Admin Operations---------------------
 int add(int sockDesc){
     struct Account account;
     struct Login login;
@@ -58,8 +60,22 @@ int add(int sockDesc){
 
     account.transactions[account.transactionsCount - 1] = transaction;
 
+    printf("%ld %lld\n", account.contactNo, account.availableAmount);
+
     write(sockDesc, &account, sizeof(account));
     write(sockDesc, &login, sizeof(login));
+
+    sleep(1);
+
+    read(sockDesc, &account, sizeof(account));
+
+    printf("\nSuccessfully added the account PFB Details of the account: \n");
+    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
+            account.accountNumber,
+            account.Name, account.SecondaryAccountHolderName,account.userName,
+            account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+
+
 }
 
 int deleteAccount(int sockDesc){
@@ -85,11 +101,11 @@ int deleteAccount(int sockDesc){
 
     read(sockDesc, &account, sizeof(account));
 
-    printf("\nCurrent Details of the selected account: %d\n", status);
-    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
-                        account.accountNumber,
-                        account.Name, account.SecondaryAccountHolderName,
-                        account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+    printf("\nCurrent Details of the selected account: \n");
+    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
+                    account.accountNumber,
+                    account.Name, account.SecondaryAccountHolderName,account.userName,
+                    account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
 
     int success;
     read(sockDesc, &success, sizeof(success));
@@ -129,11 +145,11 @@ int modify(int sockDesc){
 
     read(sockDesc, &account, sizeof(account));
 
-    printf("\nCurrent Details of the selected account: %d\n", status);
-    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
-                            account.accountNumber,
-                            account.Name, account.SecondaryAccountHolderName,
-                            account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+    printf("\nCurrent Details of the selected account: \n");
+    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
+                        account.accountNumber,
+                        account.Name, account.SecondaryAccountHolderName,account.userName,
+                        account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
 
     printf("Enter the modified value in the respected field or Enter -1 for no change\n");
 
@@ -184,10 +200,10 @@ int modify(int sockDesc){
     read(sockDesc, &account, sizeof(account));;
 
     printf("\nUpdated Details of the selected account: \n");
-    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
-                    account.accountNumber,
-                    account.Name, account.SecondaryAccountHolderName,
-                    account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
+                        account.accountNumber,
+                        account.Name, account.SecondaryAccountHolderName,account.userName,
+                        account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
 
     return 0;
 }
@@ -219,17 +235,18 @@ int search(int sockDesc){
 
     read(sockDesc, &account, sizeof(account));
 
-    printf("\nDetails of the selected account: %d\n", status);
-    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
+    printf("\nDetails of the selected account: \n");
+    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
                         account.accountNumber,
-                        account.Name, account.SecondaryAccountHolderName,
+                        account.Name, account.SecondaryAccountHolderName,account.userName,
                         account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+
     return 0;
 
 }
 
 int adminSpecificTask(int sockDesc, int operation){
-    if(operation < 1 || operation > 4){
+    if(operation < 1 || operation > 5){
         printf("Invalid Selection\n");
         return -1;
     }
@@ -241,15 +258,155 @@ int adminSpecificTask(int sockDesc, int operation){
         case 2: deleteAccount(sockDesc); break;
         case 3: modify(sockDesc); break;
         case 4: search(sockDesc); break;
+        case 5: break;
     }
     return 0;
+}
+//----------------------Admin Operations Done---------------------
+
+//----------------------User Operations----------------------
+void printTransaction(struct Account account){
+    printf("Last 5 Transaction Details: \n");
+    int last = account.transactionsCount - 1;
+    int start = (0 > account.transactionsCount - 5) ? 0 : account.transactionsCount - 5;
+    printf("    Type    |      Amount        |       Date & Time \n");
+    for(int i = start; i <= last; i++){
+        struct Transaction currTransaction = account.transactions[i];
+        printf("   %s        %lld          %s\n", currTransaction.transactionType,
+                currTransaction.amount, currTransaction.timeofTransaction);
+    }
+}
+
+int deposit(int sockDesc){
+    int status;
+    char buff[1000];
+    read(sockDesc, &status, sizeof(status));
+
+    if(status == -1){
+        printf("Something went wrong...\n");
+        return -1;
+    }
+    long long int depositAmount;
+    printf("Enter the amount: ");
+    scanf("%lld", &depositAmount);
+    write(sockDesc, &depositAmount, sizeof(depositAmount));
+
+    printf("Processing...\n\n");
+    sleep(1);
+    read(sockDesc, buff, sizeof(buff));
+    printf("%s\n", buff);
+    return 0;
+}
+
+int withdraw(int sockDesc){
+    int status;
+    char buff[1000];
+    read(sockDesc, &status, sizeof(status));
+
+    if(status == -1){
+        printf("Something went wrong...\n");
+        return -1;
+    }
+    long long int withdrawAmount;
+    printf("Enter the amount: ");
+    scanf("%lld", &withdrawAmount);
+    write(sockDesc, &withdrawAmount, sizeof(withdrawAmount));
+
+    read(sockDesc, &status, sizeof(status));
+    if(status == -1){
+        printf("Insufficient Balance\n");
+        return -1;
+    }
+    printf("Processing...\n\n");
+    sleep(1);
+    read(sockDesc, buff, sizeof(buff));
+    printf("%s\n", buff);
+    return 0;
+
+}
+
+int balanceEnquiry(int sockDesc){
+    int status;
+    char buff[1000];
+    read(sockDesc, &status, sizeof(status));
+
+    if(status == -1){
+        printf("Something went wrong...\n");
+        return -1;
+    }
+
+    printf("Processing...\n\n");
+    sleep(1);
+    read(sockDesc, buff, sizeof(buff));
+    printf("%s\n", buff);
+    return 0;
+
+}
+
+int passwordChange(int sockDesc){
+    printf("Enter new password: ");
+    char buff[40];
+    scanf(" %[^\n]", buff);
+    write(sockDesc, buff, sizeof(buff));
+
+    int status;
+    read(sockDesc, &status, sizeof(status));
+    if(status == -1){
+        printf("Something went wrong.\n");
+        return -1;
+    }
+
+    printf("Successfully changed the password.\n");
+    return 0;
+}
+
+int viewDetails(int sockDesc){
+    int status;
+    struct Account account;
+    read(sockDesc, &status, sizeof(status));
+
+    if(status == -1){
+        printf("Something went wrong...\n");
+        return -1;
+    }
+
+    printf("Processing...\n\n");
+    sleep(1);
+
+    read(sockDesc, &account, sizeof(account));
+
+    printf("\nDetails of the your account: \n");
+    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
+                        account.accountNumber,
+                        account.Name, account.SecondaryAccountHolderName,account.userName,
+                        account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+
+    printTransaction(account);
+    return 0;
+
 }
 
 int userSpecificTask(int sockDesc, int operation){
 
-    return 0;
+    if(operation < 1 || operation > 7){
+            printf("Invalid Selection\n");
+            return -1;
+        }
+
+        write(sockDesc, &operation, sizeof(operation));
+
+        switch (operation) {
+            case 1: deposit(sockDesc); break;
+            case 2: withdraw(sockDesc); break;
+            case 3: balanceEnquiry(sockDesc); break;
+            case 4: passwordChange(sockDesc); break;
+            case 5: viewDetails(sockDesc); break;
+            case 6: break;
+        }
+        return 0;
 }
 
+//----------------------User Operations Done----------------------
 int main(){
     struct sockaddr_in server;
     int sockDesc, messageLen;

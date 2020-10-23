@@ -3,6 +3,7 @@
 #include<unistd.h>
 #include"LoginStruct.c"
 #include<string.h>
+#include<stdbool.h>
 
 int main(){
 
@@ -16,6 +17,7 @@ int main(){
     memcpy(adminLogin.type, "AD", 2);
     memcpy(adminLogin.userName, "Admin", 5);
     memcpy(adminLogin.password, "root", 4);
+    adminLogin.active = true;
 
     write(fd, &adminLogin, sizeof(adminLogin));
     write(fdAccountNumber, &accountNumber, sizeof(accountNumber));

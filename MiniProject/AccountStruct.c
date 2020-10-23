@@ -8,13 +8,14 @@ struct Account {
     char type[3];                   //JA: Joint Account, NU: Normal User
     char Name[40];
     char SecondaryAccountHolderName[40];        //Will be filled only for Joint accounts;
+    char userName[50];
 
     bool active;
 
     long contactNo;
     long long int availableAmount;
 
-    struct Transaction transactions[1000];
     int transactionsCount;
+    struct Transaction transactions[200];
 
 };
