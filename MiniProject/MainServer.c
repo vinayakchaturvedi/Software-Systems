@@ -8,8 +8,8 @@
 #include<stdlib.h>
 #include<stdbool.h>
 #include<time.h>
-#include"AccountStruct.c"
-#include"LoginStruct.c"
+#include"./Structures/AccountStruct.c"
+#include"./Structures/LoginStruct.c"
 
 #define ADMIN 1
 #define NORMAL_USER 2

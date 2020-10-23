@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<fcntl.h>
 #include<unistd.h>
-#include"LoginStruct.c"
+#include"./Structures/LoginStruct.c"
 #include<string.h>
 #include<stdbool.h>
 
