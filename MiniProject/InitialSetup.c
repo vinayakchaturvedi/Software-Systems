@@ -1,11 +1,15 @@
 #include<stdio.h>
 #include<fcntl.h>
 #include<unistd.h>
-#include"./Structures/LoginStruct.c"
 #include<string.h>
 #include<stdbool.h>
+#include<stdlib.h>
+#include"./Structures/LoginStruct.c"
 
 int main(){
+
+    char command[] = "rm -rf ./db/*";
+    system(command);
 
     printf("Initializing DB...\n\n");
     int fd = open("./db/admin_Login_DB", O_CREAT|O_WRONLY|O_TRUNC, 0644);

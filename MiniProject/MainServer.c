@@ -143,9 +143,14 @@ int deleteAccount(int clientSockDesc){
     }
     close(fd);              //close read only
 
-    if(bytes == 0 || !account.active){
-        int notPresent = -2;
-        write(clientSockDesc, &notPresent, sizeof(notPresent));
+    if(bytes == 0){
+            int notPresent = -2;
+            write(clientSockDesc, &notPresent, sizeof(notPresent));
+            return -1;
+        }
+    if(!account.active){
+        int inActive = -3;
+        write(clientSockDesc, &inActive, sizeof(inActive));
         return -1;
     }
 
@@ -453,7 +458,7 @@ int withdraw(int clientSockDesc, char* userName){
     generateTimeString();
     struct Transaction transaction;
     transaction.amount = withdrawAmount;
-    memcpy(transaction.transactionType, "Withdraw", 7);
+    memcpy(transaction.transactionType, "Withdraw", 8);
     memcpy(transaction.timeofTransaction, timeofTransaction, sizeof(timeofTransaction));
 
     account.transactions[account.transactionsCount - 1] = transaction;
@@ -608,14 +613,25 @@ int handleUserRequest(int clientSockDesc, char* userName){
 }
 //----------------------User Operations Done----------------------
 
-int validateCredentials(int clientSockDesc, int userType){
+int validateCredentialsAndServiceTheClient(int clientSockDesc, int userType){
 
     char db[30];
+    char type[3];
+
 
     switch (userType) {
-        case 1: memcpy(db, "./db/admin_Login_DB", strlen("./db/admin_Login_DB")); break;
-        case 2: memcpy(db, "./db/user_login_DB", strlen("./db/user_login_DB")); break;
-        case 3: memcpy(db, "./db/user_login_DB", strlen("./db/user_login_DB")); break;
+        case 1:
+            memcpy(db, "./db/admin_Login_DB", strlen("./db/admin_Login_DB"));
+            memcpy(type, "AD", strlen("AD"));
+            break;
+        case 2:
+            memcpy(db, "./db/user_login_DB", strlen("./db/user_login_DB"));
+            memcpy(type, "NU", strlen("NU"));
+            break;
+        case 3:
+            memcpy(db, "./db/user_login_DB", strlen("./db/user_login_DB"));
+            memcpy(type, "JA", strlen("JA"));
+            break;
     }
 
     char userName[40], password[40];
@@ -641,7 +657,7 @@ int validateCredentials(int clientSockDesc, int userType){
     while(currBytes != 0){
         //TODO: put JA, NU as constraint
         if(record.active && strncmp(record.userName, userName, strlen(record.userName)) == 0 &&
-        strncmp(record.password, password, strlen(record.password)) == 0){
+        strncmp(record.password, password, strlen(record.password)) == 0 && strncmp(record.type, type, strlen(record.type)) == 0){
             write(clientSockDesc, "Logged-in successfully", sizeof("Logged-in successfully"));
 
             lock.l_type = F_UNLCK;
@@ -656,15 +672,12 @@ int validateCredentials(int clientSockDesc, int userType){
         }
         currBytes = read(fd, &record, sizeof(record));
     }
-    if(currBytes == 0){
-        write(clientSockDesc, "-1", sizeof("-1"));
-        lock.l_type = F_UNLCK;
-        fcntl(fd, F_SETLK, &lock);
-    }
+    write(clientSockDesc, "-1", sizeof("-1"));
+    lock.l_type = F_UNLCK;
+    fcntl(fd, F_SETLK, &lock);
     close(fd);
-    return 0;
+    return -1;
 }
-
 
 int handleClientRequest(int clientSockDesc, int clientNum){
 
@@ -675,10 +688,7 @@ int handleClientRequest(int clientSockDesc, int clientNum){
 
     //--------------------------Get the user type whether user is admin, normal user, joint account holder----------------
     read(clientSockDesc, &userType, sizeof(userType));
-    validateCredentials(clientSockDesc, userType);
-
-
-    return 0;        //Terminate the child process
+    return validateCredentialsAndServiceTheClient(clientSockDesc, userType);
 }
 
 int main(){
@@ -704,8 +714,7 @@ int main(){
 
         if(!fork()){        //child to serve client's request
             close(sockDesc);        //close socket descriptor of parent because it is not required in serving the request by child.
-            handleClientRequest(clientSockDesc, clientNum);
-            return 0;
+            return handleClientRequest(clientSockDesc, clientNum);
         }
         else{           //Parent -- continue accepting the request of other clients.
             clientNum++;

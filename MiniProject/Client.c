@@ -60,8 +60,6 @@ int add(int sockDesc){
 
     account.transactions[account.transactionsCount - 1] = transaction;
 
-    printf("%ld %lld\n", account.contactNo, account.availableAmount);
-
     write(sockDesc, &account, sizeof(account));
     write(sockDesc, &login, sizeof(login));
 
@@ -95,7 +93,11 @@ int deleteAccount(int sockDesc){
         return -1;
     }
     else if(status == -2){
-        printf("Entered account number not present or Already deactivated.\n");
+        printf("Entered account number not present.\n");
+        return -1;
+    }
+    else if(status == -3){
+        printf("Entered account number is in-active.\n");
         return -1;
     }
 
@@ -135,7 +137,7 @@ int modify(int sockDesc){
         return -1;
     }
     else if(status == -2){
-        printf("Entered account number not present or Already deactivated.\n");
+        printf("Entered account number not present.\n");
         return -1;
     }
     else if(status == -3){
@@ -225,7 +227,7 @@ int search(int sockDesc){
         return -1;
     }
     else if(status == -2){
-        printf("Entered account number not present or Already deactivated.\n");
+        printf("Entered account number not present.\n");
         return -1;
     }
     else if(status == -3){
