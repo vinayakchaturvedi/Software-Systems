@@ -23,8 +23,8 @@ void printAccountDetails(struct Account account){
     printf("UserName1 (For Login Purpose):      %s\n\n", account.userName);
 
     if(strncmp(account.type, "JA", strlen("JA")) == 0){
-    printf("Secondary AccountHolder Name:       %s\nUserName2 (For Login Purpose):      %s\n\n",
-            account.SecondaryAccountHolderName, account.userName2);
+    printf("Secondary AccountHolder Name:       %s\n\n",
+            account.SecondaryAccountHolderName);
     }
 
 
@@ -37,7 +37,6 @@ void printAccountDetails(struct Account account){
 int add(int sockDesc){
     struct Account account;
     struct Login login;
-
 
     printf("\nEnter the following Details: \n");
     printf("Enter 1 for Normal Account and 2 for Joint Account: ");
@@ -58,19 +57,11 @@ int add(int sockDesc){
     if(type == 2){
         printf("Secondary Account Holder Name: ");
         scanf(" %[^\n]", account.SecondaryAccountHolderName);
-        memcpy(login.userName2, &account.SecondaryAccountHolderName, sizeof(account.SecondaryAccountHolderName));
+    }
 
-        printf("Password for 1st User: ");
-        scanf(" %[^\n]", login.password);
-        printf("Password for 2nd User: ");
-        scanf(" %[^\n]", login.password2);
-    }
-    else{
-        printf("Password: ");
-        scanf(" %[^\n]", login.password);
-        bzero(login.userName2, sizeof(login.userName2));
-        bzero(login.password2, sizeof(login.password2));
-    }
+    printf("Password: ");
+    scanf(" %[^\n]", login.password);
+
     printf("Contact Number: ");
     scanf(" %ld", &account.contactNo);
 
