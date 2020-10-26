@@ -15,10 +15,29 @@
 #define NORMAL_USER 2
 #define JOINT_ACCOUNT 3
 
+void printAccountDetails(struct Account account){
+
+    printf("\nAccountNumber:                      %ld\n", account.accountNumber);
+    printf("Type:                               %s\n\n", strncmp(account.type, "JA", strlen("JA")) != 0 ? "Normal Account":"Joint Account");
+    printf("Name:                               %s\n", account.Name);
+    printf("UserName1 (For Login Purpose):      %s\n\n", account.userName);
+
+    if(strncmp(account.type, "JA", strlen("JA")) == 0){
+    printf("Secondary AccountHolder Name:       %s\nUserName2 (For Login Purpose):      %s\n\n",
+            account.SecondaryAccountHolderName, account.userName2);
+    }
+
+
+    printf("Contact Number:                     %ld\nAvailable Amount:                   %lld\n\n",
+            account.contactNo, account.availableAmount);
+
+}
+
 //----------------------Admin Operations---------------------
 int add(int sockDesc){
     struct Account account;
     struct Login login;
+
 
     printf("\nEnter the following Details: \n");
     printf("Enter 1 for Normal Account and 2 for Joint Account: ");
@@ -32,18 +51,26 @@ int add(int sockDesc){
     }
     memcpy(login.type, &account.type, 2);
 
-    printf("Name (This will also be your account login userName): ");
+    printf("Name: ");
     scanf(" %[^\n]", account.Name);
     memcpy(login.userName, &account.Name, sizeof(account.Name));
 
     if(type == 2){
         printf("Secondary Account Holder Name: ");
         scanf(" %[^\n]", account.SecondaryAccountHolderName);
+        memcpy(login.userName2, &account.SecondaryAccountHolderName, sizeof(account.SecondaryAccountHolderName));
+
+        printf("Password for 1st User: ");
+        scanf(" %[^\n]", login.password);
+        printf("Password for 2nd User: ");
+        scanf(" %[^\n]", login.password2);
     }
-
-    printf("Password: ");
-    scanf(" %[^\n]", login.password);
-
+    else{
+        printf("Password: ");
+        scanf(" %[^\n]", login.password);
+        bzero(login.userName2, sizeof(login.userName2));
+        bzero(login.password2, sizeof(login.password2));
+    }
     printf("Contact Number: ");
     scanf(" %ld", &account.contactNo);
 
@@ -67,13 +94,9 @@ int add(int sockDesc){
 
     read(sockDesc, &account, sizeof(account));
 
+    system("clear");
     printf("\nSuccessfully added the account PFB Details of the account: \n");
-    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
-            account.accountNumber,
-            account.Name, account.SecondaryAccountHolderName,account.userName,
-            account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
-
-
+    printAccountDetails(account);
 }
 
 int deleteAccount(int sockDesc){
@@ -104,10 +127,7 @@ int deleteAccount(int sockDesc){
     read(sockDesc, &account, sizeof(account));
 
     printf("\nCurrent Details of the selected account: \n");
-    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
-                    account.accountNumber,
-                    account.Name, account.SecondaryAccountHolderName,account.userName,
-                    account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+    printAccountDetails(account);
 
     int success;
     read(sockDesc, &success, sizeof(success));
@@ -148,10 +168,7 @@ int modify(int sockDesc){
     read(sockDesc, &account, sizeof(account));
 
     printf("\nCurrent Details of the selected account: \n");
-    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
-                        account.accountNumber,
-                        account.Name, account.SecondaryAccountHolderName,account.userName,
-                        account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+    printAccountDetails(account);
 
     printf("Enter the modified value in the respected field or Enter -1 for no change\n");
 
@@ -201,11 +218,9 @@ int modify(int sockDesc){
     write(sockDesc, &account, sizeof(account));;
     read(sockDesc, &account, sizeof(account));;
 
+    system("clear");
     printf("\nUpdated Details of the selected account: \n");
-    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
-                        account.accountNumber,
-                        account.Name, account.SecondaryAccountHolderName,account.userName,
-                        account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+    printAccountDetails(account);
 
     return 0;
 }
@@ -237,30 +252,37 @@ int search(int sockDesc){
 
     read(sockDesc, &account, sizeof(account));
 
+    system("clear");
     printf("\nDetails of the selected account: \n");
-    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
-                        account.accountNumber,
-                        account.Name, account.SecondaryAccountHolderName,account.userName,
-                        account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+    printAccountDetails(account);
 
     return 0;
 
 }
 
-int adminSpecificTask(int sockDesc, int operation){
-    if(operation < 1 || operation > 5){
-        printf("Invalid Selection\n");
-        return -1;
-    }
+int adminSpecificTask(int sockDesc){
+    char welcome[] = "\n-----------------------------Welcome Admin-------------------------\n\n";
+    printf("%s", welcome);
+    while(true){
+        printf("\nEnter the number corresponding to the operation that you want to perform:\n1: Add | 2: Delete | 3: Modify | 4: Search | 5: Exit\n");
+        int operation;               //--Operations for admin
+        scanf("%d", &operation);
 
-    write(sockDesc, &operation, sizeof(operation));
+        if(operation < 1 || operation > 5){
+            printf("Invalid Selection\n");
+            return -1;
+        }
 
-    switch (operation) {
-        case 1: add(sockDesc); break;
-        case 2: deleteAccount(sockDesc); break;
-        case 3: modify(sockDesc); break;
-        case 4: search(sockDesc); break;
-        case 5: break;
+        write(sockDesc, &operation, sizeof(operation));
+        if(operation == 5) break;
+
+        switch (operation) {
+            case 1: add(sockDesc); break;
+            case 2: deleteAccount(sockDesc); break;
+            case 3: modify(sockDesc); break;
+            case 4: search(sockDesc); break;
+        }
+        printf("\n*********************************************************************\n");
     }
     return 0;
 }
@@ -377,34 +399,38 @@ int viewDetails(int sockDesc){
 
     read(sockDesc, &account, sizeof(account));
 
+    system("clear");
     printf("\nDetails of the your account: \n");
-    printf("AccountNumber: %ld\nName: %s\nSecondary AccountHolder Name (If Joint Account): %s\nUserName (For Login Purpose): %s\nType: %s\nActive: %s\nContact Number: %ld\nAvailable Amount: %lld\n\n",
-                        account.accountNumber,
-                        account.Name, account.SecondaryAccountHolderName,account.userName,
-                        account.type, account.active ? "true":"false", account.contactNo, account.availableAmount);
+    printAccountDetails(account);
 
     printTransaction(account);
     return 0;
 
 }
 
-int userSpecificTask(int sockDesc, int operation){
+int userSpecificTask(int sockDesc){
+    char welcome[] = "\n-----------------------------Welcome User-------------------------\n\n";
+    printf("%s", welcome);
+    while(true){
+        printf("\nEnter the number corresponding to the operation that you want to perform:\n1: Deposit | 2: Withdraw | 3: Balance Enquiry | 4: Password Change | 5: View Details | 6: Exit\n");
+        int operation;              //--Operations for user
+        scanf("%d", &operation);
 
-    if(operation < 1 || operation > 7){
-            printf("Invalid Selection\n");
-            return -1;
-        }
-
-        write(sockDesc, &operation, sizeof(operation));
-
-        switch (operation) {
-            case 1: deposit(sockDesc); break;
-            case 2: withdraw(sockDesc); break;
-            case 3: balanceEnquiry(sockDesc); break;
-            case 4: passwordChange(sockDesc); break;
-            case 5: viewDetails(sockDesc); break;
-            case 6: break;
-        }
+        if(operation < 1 || operation > 7){
+                printf("Invalid Selection\n");
+                return -1;
+            }
+            write(sockDesc, &operation, sizeof(operation));
+            if(operation == 6) break;
+            switch (operation) {
+                case 1: deposit(sockDesc); break;
+                case 2: withdraw(sockDesc); break;
+                case 3: balanceEnquiry(sockDesc); break;
+                case 4: passwordChange(sockDesc); break;
+                case 5: viewDetails(sockDesc); break;
+            }
+            printf("\n*********************************************************************\n");
+    }
         return 0;
 }
 
@@ -474,17 +500,11 @@ int main(){
     }
     printf("%s\n", buff);
 
-    //-----------Admin Choice--------
-    read(sockDesc, buff, sizeof(buff));     //--Welcome message from admin or user
-    printf("%s\n", buff);
-
-    int operation;                          //--Operations for admin or user
-    scanf("%d", &operation);
     //----------------Admin Specific---------
-    if(userType == 1) return adminSpecificTask(sockDesc, operation);
+    if(userType == 1) return adminSpecificTask(sockDesc);
 
     //----------------User Specific---------
-    else return userSpecificTask(sockDesc, operation);
+    else return userSpecificTask(sockDesc);
 
     close(sockDesc);
     return 0;

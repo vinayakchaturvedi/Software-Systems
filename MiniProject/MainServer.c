@@ -15,10 +15,6 @@
 #define NORMAL_USER 2
 #define JOINT_ACCOUNT 3
 
-void printString(char *string){
-    printf(" Testing: %s | ", string);
-}
-
 char timeofTransaction[40];
 
 void generateTimeString(){
@@ -91,6 +87,14 @@ int add(int clientSockDesc){
     strcat(userName, accountNumberString);
     memcpy(login.userName, userName, sizeof(userName));
     memcpy(account.userName, userName, sizeof(userName));
+
+    if(strncmp(login.type, "JA", strlen("JA")) == 0){
+        char userName2[40];
+        strcpy(userName2, account.SecondaryAccountHolderName);
+        strcat(userName2, accountNumberString);
+        memcpy(login.userName2, userName2, sizeof(userName2));
+        memcpy(account.userName2, userName2, sizeof(userName2));
+    }
 
     generateTimeString();
     memcpy(account.transactions[0].timeofTransaction, timeofTransaction, sizeof(timeofTransaction));
@@ -185,7 +189,8 @@ int deleteAccount(int clientSockDesc){
 
     int currBytes = read(fd, &oldLogin, sizeof(oldLogin));
     count = 0;
-    while(currBytes != 0 && strncmp(account.userName, oldLogin.userName, strlen(account.userName)) != 0){
+    while(currBytes != 0 && strncmp(account.userName, oldLogin.userName, strlen(account.userName)) != 0
+            && strncmp(account.userName2, oldLogin.userName2, strlen(account.userName2)) != 0){
         currBytes = read(fd, &oldLogin, sizeof(oldLogin));
         count++;
     }
@@ -291,6 +296,7 @@ int modify(int clientSockDesc){
     lseek(fd, ((count) * sizeof(oldLogin)), SEEK_SET);
     memcpy(oldLogin.type, account.type, 2);
     memcpy(oldLogin.userName, account.userName, sizeof(account.userName));
+    memcpy(oldLogin.userName2, account.userName2, sizeof(account.userName2));
 
     lseek(fd, ((count) * sizeof(oldLogin)), SEEK_SET);
     write(fd, &oldLogin, sizeof(oldLogin));
@@ -345,17 +351,18 @@ int search(int clientSockDesc){
 }
 
 int handleAdminRequest(int clientSockDesc){
-    char welcome[] = "\n-----------------------------Welcome Admin-------------------------\n\nEnter the number corresponding to the operation that you want to perform:\n1: Add | 2: Delete | 3: Modify | 4: Search | 5: Exit";
-    write(clientSockDesc, welcome, sizeof(welcome));
 
-    int operation;
+    while(true){
+        int operation;
+        read(clientSockDesc, &operation, sizeof(operation));
+        if(operation == 5) break;
 
-    read(clientSockDesc, &operation, sizeof(operation));
-    switch (operation) {
-        case 1: add(clientSockDesc); break;
-        case 2: deleteAccount(clientSockDesc); break;
-        case 3: modify(clientSockDesc); break;
-        case 4: search(clientSockDesc); break;
+        switch (operation) {
+            case 1: add(clientSockDesc); break;
+            case 2: deleteAccount(clientSockDesc); break;
+            case 3: modify(clientSockDesc); break;
+            case 4: search(clientSockDesc); break;
+        }
     }
     return 0;
 }
@@ -371,7 +378,8 @@ int deposit(int clientSockDesc, char* userName){
     int errorMessage = -1;
 
     int bytes = read(fd, &account, sizeof(account));
-    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0){
+    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0 &&
+                strncmp(account.userName2, userName, strlen(account.userName2)) != 0){
         bytes = read(fd, &account, sizeof(account));
         count++;
     }
@@ -433,7 +441,8 @@ int withdraw(int clientSockDesc, char* userName){
     int errorMessage = -1;
 
     int bytes = read(fd, &account, sizeof(account));
-    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0){
+    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0 &&
+                    strncmp(account.userName2, userName, strlen(account.userName2)) != 0){
         bytes = read(fd, &account, sizeof(account));
         count++;
     }
@@ -499,7 +508,8 @@ int balanceEnquiry(int clientSockDesc, char* userName){
     int errorMessage = -1;
 
     int bytes = read(fd, &account, sizeof(account));
-    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0){
+    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0 &&
+                    strncmp(account.userName2, userName, strlen(account.userName2)) != 0){
         bytes = read(fd, &account, sizeof(account));
         count++;
     }
@@ -529,17 +539,22 @@ int passwordChange(int clientSockDesc, char* userName){
     struct Login oldLogin;
     char buff[40];
     int errorMessage = -1, success = 1;
+    bool isSecondaryUser = false;
 
     int currBytes = read(fd, &oldLogin, sizeof(oldLogin));
     count = 0;
-    while(currBytes != 0 && strncmp(userName, oldLogin.userName, strlen(userName)) != 0){
+    while(currBytes != 0 && strncmp(userName, oldLogin.userName, strlen(userName)) != 0 &&
+            strncmp(userName, oldLogin.userName2, strlen(userName)) != 0){
         currBytes = read(fd, &oldLogin, sizeof(oldLogin));
         count++;
     }
+
     if(currBytes == 0){
         write(clientSockDesc, &errorMessage, sizeof(errorMessage));
         return -1;
     }
+
+    if(strncmp(userName, oldLogin.userName2, strlen(userName)) == 0) isSecondaryUser = true;
 
     struct flock lock;
     lock.l_type = F_WRLCK;
@@ -553,7 +568,12 @@ int passwordChange(int clientSockDesc, char* userName){
     lseek(fd, ((count) * sizeof(oldLogin)), SEEK_SET);
     read(clientSockDesc, buff, sizeof(buff));
 
-    memcpy(oldLogin.password, buff, sizeof(buff));
+    if(isSecondaryUser){
+        memcpy(oldLogin.password2, buff, sizeof(buff));
+    }
+    else{
+        memcpy(oldLogin.password, buff, sizeof(buff));
+    }
 
     lseek(fd, ((count) * sizeof(oldLogin)), SEEK_SET);
     write(fd, &oldLogin, sizeof(oldLogin));
@@ -575,7 +595,8 @@ int viewDetails(int clientSockDesc, char* userName){
     int errorMessage = -1;
 
     int bytes = read(fd, &account, sizeof(account));
-    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0){
+    while(bytes != 0 && strncmp(account.userName, userName, strlen(account.userName)) != 0 &&
+                    strncmp(account.userName2, userName, strlen(account.userName2)) != 0){
         bytes = read(fd, &account, sizeof(account));
         count++;
     }
@@ -594,18 +615,19 @@ int viewDetails(int clientSockDesc, char* userName){
 }
 
 int handleUserRequest(int clientSockDesc, char* userName){
-    char welcome[] = "\n-----------------------------Welcome User-------------------------\n\nEnter the number corresponding to the operation that you want to perform:\n1: Deposit | 2: Withdraw | 3: Balance Enquiry | 4: Password Change | 5: View Details | 6: Exit\n";
-    write(clientSockDesc, welcome, sizeof(welcome));
 
-    int operation;
+    while(true){
+        int operation;
+        read(clientSockDesc, &operation, sizeof(operation));
 
-    read(clientSockDesc, &operation, sizeof(operation));
-    switch (operation) {
-        case 1: deposit(clientSockDesc, userName); break;
-        case 2: withdraw(clientSockDesc, userName); break;
-        case 3: balanceEnquiry(clientSockDesc, userName); break;
-        case 4: passwordChange(clientSockDesc, userName); break;
-        case 5: viewDetails(clientSockDesc, userName); break;
+        if(operation == 6) break;
+        switch (operation) {
+            case 1: deposit(clientSockDesc, userName); break;
+            case 2: withdraw(clientSockDesc, userName); break;
+            case 3: balanceEnquiry(clientSockDesc, userName); break;
+            case 4: passwordChange(clientSockDesc, userName); break;
+            case 5: viewDetails(clientSockDesc, userName); break;
+        }
     }
     return 0;
 
@@ -656,8 +678,21 @@ int validateCredentialsAndServiceTheClient(int clientSockDesc, int userType){
     int currBytes = read(fd, &record, sizeof(record));
     while(currBytes != 0){
         //TODO: put JA, NU as constraint
-        if(record.active && strncmp(record.userName, userName, strlen(record.userName)) == 0 &&
-        strncmp(record.password, password, strlen(record.password)) == 0 && strncmp(record.type, type, strlen(record.type)) == 0){
+        if(record.active && strncmp(record.type, type, strlen(record.type)) == 0 &&
+        (strncmp(record.userName, userName, strlen(record.userName)) == 0 &&
+        strncmp(record.password, password, strlen(record.password)) == 0) ||
+
+        (strncmp(record.userName2, userName, strlen(record.userName2)) == 0 &&
+        strncmp(record.password2, password, strlen(record.password2)) == 0)){
+
+             char userNameTemp[40];
+             if(strncmp(record.userName, userName, strlen(record.userName)) == 0){
+                memcpy(userNameTemp, record.userName, sizeof(record.userName));
+             }
+             else{
+                memcpy(userNameTemp, record.userName2, sizeof(record.userName2));
+             }
+
             write(clientSockDesc, "Logged-in successfully", sizeof("Logged-in successfully"));
 
             lock.l_type = F_UNLCK;
@@ -665,7 +700,7 @@ int validateCredentialsAndServiceTheClient(int clientSockDesc, int userType){
 
             //go to services
             if(userType == ADMIN) handleAdminRequest(clientSockDesc);
-            else handleUserRequest(clientSockDesc, record.userName);
+            else handleUserRequest(clientSockDesc, userNameTemp);
 
             close(fd);
             return 0;
